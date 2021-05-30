@@ -74,14 +74,13 @@ function Timer(callback, delay, isInterval, number) {
 }
 
 function set(callback, delay, isInterval) {
-  const result = number;
-  number++;
+  const num = number++;
 
-  const timer = new Timer(callback, delay, isInterval, result);
-  timers[result] = timer;
+  const timer = new Timer(callback, delay, isInterval, num);
+  timers[num] = timer;
 
   timer.start();
-  return result;
+  return num;
 }
 
 function clear(number) {
