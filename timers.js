@@ -19,7 +19,7 @@ function Timer(callback, delay, isInterval, number) {
   this.isInterval = isInterval;
   this.number = number;
 
-  this.start = function (number) {
+  this.start = function () {
     if (!this.isRunning) {
       this.isRunning = true;
       this.thread = new java.lang.Thread({
@@ -29,7 +29,7 @@ function Timer(callback, delay, isInterval, number) {
           this.isRunning = false;
           this.thread = null;
   
-          delete timers[number];
+          delete timers[this.number];
         }
       });
   
@@ -64,6 +64,10 @@ function Timer(callback, delay, isInterval, number) {
       if (this.thread) {
         this.thread.interrupt();
         this.thread = null;
+      }
+
+      if (timers[this.number]) {
+        delete timers[this.number];
       }
     }
   }
@@ -103,7 +107,7 @@ exports.clearInterval = function (interval) {
 }
 
 exports.clearAll = function() {
-  for (const number in Object.keys(timers)) {
+  Object.keys(timers).forEach((number) => {
     timers[number].stop();
-  }
+  });
 }
