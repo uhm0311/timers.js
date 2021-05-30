@@ -93,16 +93,16 @@ exports.setTimeout = function (callback, delay) {
   return set(callback, delay, false);
 }
 
-exports.clearTimeout = function (timeout) {
-  clear(timeout);
+exports.clearTimeout = function (number) {
+  clear(number);
 }
 
 exports.setInterval = function (callback, delay) {
   return set(callback, delay, true);
 }
 
-exports.clearInterval = function (interval) {
-  clear(interval);
+exports.clearInterval = function (number) {
+  clear(number);
 }
 
 exports.clearAll = function() {
