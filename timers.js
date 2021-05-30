@@ -101,3 +101,9 @@ exports.setInterval = function (callback, delay) {
 exports.clearInterval = function (interval) {
   clear(interval);
 }
+
+exports.clearAll = function() {
+  for (const number in Object.keys(timers)) {
+    timers[number].stop();
+  }
+}
