@@ -1,4 +1,6 @@
 (function () {
+  Device.acquireWakeLock(android.os.PowerManager.PARTIAL_WAKE_LOCK, "wakelock");
+
   const timers = {};
   let number = 1;
 
@@ -20,55 +22,57 @@
     this.isInterval = isInterval;
     this.number = number;
 
+    const self = this;
+
     this.start = function () {
-      if (!this.isRunning) {
-        this.isRunning = true;
-        this.thread = new java.lang.Thread({
+      if (!self.isRunning) {
+        self.isRunning = true;
+        self.thread = new java.lang.Thread({
           run: () => {
-            this.run();
+            self.run();
 
-            this.isRunning = false;
-            this.thread = null;
+            self.isRunning = false;
+            self.thread = null;
 
-            delete timers[this.number];
+            delete timers[self.number];
           }
         });
 
-        this.thread.start();
+        self.thread.start();
       }
     }
 
     this.run = function () {
       do {
         try {
-          if (this.isRunning && isNumber(this.delay)) {
-            java.lang.Thread.sleep(this.delay);
+          if (self.isRunning && isNumber(self.delay)) {
+            java.lang.Thread.sleep(Math.floor(self.delay));
           }
         } catch (_) {
 
         }
 
         try {
-          if (this.isRunning && isFunction(this.callback)) {
-            this.callback();
+          if (self.isRunning && isFunction(self.callback)) {
+            self.callback();
           }
         } catch (e) {
-          print(e);
+          Log.e(e);
         }
-      } while (this.isRunning && this.isInterval);
+      } while (self.isRunning && self.isInterval);
     }
 
     this.stop = function () {
-      if (this.isRunning) {
-        this.isRunning = false;
+      if (self.isRunning) {
+        self.isRunning = false;
 
-        if (this.thread) {
-          this.thread.interrupt();
-          this.thread = null;
+        if (self.thread) {
+          self.thread.interrupt();
+          self.thread = null;
         }
 
-        if (timers[this.number]) {
-          delete timers[this.number];
+        if (timers[self.number]) {
+          delete timers[self.number];
         }
       }
     }
